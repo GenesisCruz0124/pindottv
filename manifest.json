@@ -1,0 +1,40 @@
+{
+  "name": "PindotTV - Smart TV Remote",
+  "short_name": "PindotTV",
+  "description": "Gawing remote control ang phone mo para sa Smart TV gamit ang WiFi. Pindot mo, gana agad!",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b1220",
+  "theme_color": "#3b82f6",
+  "lang": "fil-PH",
+  "categories": ["utilities", "entertainment"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
