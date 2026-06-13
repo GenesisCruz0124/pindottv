@@ -466,6 +466,15 @@ const TVProtocols = (() => {
   };
 
   // ----------------------------------------------------------------------
+  // DEVANT - newer "Smart TV webOS" (STW series) sets run webOS Hub, the
+  // same platform LG licenses to other brands, so they speak the exact
+  // same SSAP/WebSocket pairing protocol as LG webOS TVs.
+  // Older Devant models (VIDAA OS) or basic non-smart sets are not
+  // supported - see the Help / compatibility table.
+  // ----------------------------------------------------------------------
+  const devant = lg;
+
+  // ----------------------------------------------------------------------
   // SONY - Bravia / Android TV, IRCC-IP over HTTP (port 80)
   // https://pro-bravia.sony.net/develop/integrate/ircc-ip/
   // Requires "IP Control" with a Pre-Shared Key (PSK) enabled on the TV.
@@ -642,7 +651,7 @@ const TVProtocols = (() => {
   // ----------------------------------------------------------------------
   // Unified dispatch
   // ----------------------------------------------------------------------
-  const BRANDS = { roku, samsung, lg, sony, panasonic };
+  const BRANDS = { roku, samsung, lg, sony, panasonic, devant };
 
   function isDigitKey(key) {
     return /^[0-9]$/.test(key);
@@ -665,5 +674,5 @@ const TVProtocols = (() => {
     return proto.testConnection(device, onTokenUpdate);
   }
 
-  return { roku, samsung, lg, sony, panasonic, sendKey, testConnection, withTimeout };
+  return { roku, samsung, lg, sony, panasonic, devant, sendKey, testConnection, withTimeout };
 })();
