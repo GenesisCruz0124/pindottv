@@ -3,7 +3,7 @@
  */
 
 (() => {
-  const BRAND_LABELS = { roku: 'Roku', samsung: 'Samsung', lg: 'LG', sony: 'Sony', panasonic: 'Panasonic', devant: 'Devant' };
+  const BRAND_LABELS = { roku: 'Roku', samsung: 'Samsung', lg: 'LG', sony: 'Sony', panasonic: 'Panasonic', devant: 'Devant', tcl: 'TCL' };
   const BRANDS_WITH_PSK = ['sony'];
 
   const byId = (id) => document.getElementById(id);

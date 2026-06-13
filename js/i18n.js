@@ -51,6 +51,7 @@ const PindotI18n = (() => {
         card2Body: `<p>Kailangan mo ang IP address ng TV (hal. <code>192.168.1.50</code>) para ito i-type sa "Magdagdag ng TV":</p>
         <ul>
           <li><strong>Roku:</strong> Settings &rarr; Network &rarr; About. Makikita dito ang "IP address".</li>
+          <li><strong>TCL (Roku TV):</strong> Settings &rarr; Network &rarr; About. Makikita dito ang "IP address" - pareho ito sa Roku. (Hindi suportado ang TCL Google TV / Android TV.)</li>
           <li><strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, o Settings &rarr; Support &rarr; About This TV.</li>
           <li><strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; piliin ang connected network &rarr; makikita ang IP address (minsan tinatawag na "Network Status").</li>
           <li><strong>Devant (webOS / STW series):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; piliin ang connected network &rarr; makikita ang IP address. Pareho ang setup ng mga ito sa LG webOS.</li>
@@ -66,6 +67,11 @@ const PindotI18n = (() => {
             <td>Roku TV / Stick</td>
             <td><span class="badge badge-good">Pinaka-Reliable</span></td>
             <td>Gamit ang Roku ECP (port 8060). Pero dahil HTTP lang (hindi HTTPS) ang Roku, posibleng harangin ng browser - tingnan ang #4 sa baba.</td>
+          </tr>
+          <tr>
+            <td>TCL (Roku TV)</td>
+            <td><span class="badge badge-good">Pinaka-Reliable</span></td>
+            <td>Totoong Roku OS ang ginagamit ng TCL Roku TV, kaya pareho ang ECP (port 8060) at "Mixed Content" caveat sa #4. Ang TCL Google TV / Android TV ay hindi suportado.</td>
           </tr>
           <tr>
             <td>Samsung Smart TV (Tizen, 2016+)</td>
@@ -165,6 +171,7 @@ const PindotI18n = (() => {
       },
       brandHints: {
         roku: '<strong>Roku:</strong> Settings &rarr; Network &rarr; About. Hanapin ang "IP address" (hal. 192.168.1.50). Siguraduhing nakabukas ang "Control by mobile apps / Network access" sa Settings &rarr; System &rarr; Advanced system settings.',
+        tcl: '<strong>TCL (Roku TV):</strong> Suportado lang ang mga TCL Roku TV - totoong Roku OS ang ginagamit nito, kaya pareho ang setup sa Roku: kumonekta sa parehong WiFi, walang pairing na kailangan. Ang TCL Google TV / Android TV ay hindi suportado.',
         samsung: '<strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, o Settings &rarr; Support &rarr; About This TV. Sa unang gamit, lalabas ang "Allow connection?" sa TV - tanggapin agad (within ~25 seconds).',
         lg: '<strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; piliin ang konektadong network para makita ang IP. Sa unang gamit, may lalabas na "Connect?" prompt sa TV - tanggapin agad.',
         devant: '<strong>Devant Smart TV (mga bagong webOS / "STW" series):</strong> Ginagamit nito ang parehong webOS platform ng LG, kaya pareho ang setup - i-enable ang "LG Connect Apps" / "Mobile TV On" sa TV settings, tapos tanggapin ang "Connect?" prompt na lalabas sa TV screen. Mga mas lumang Devant (VIDAA OS) o basic/non-smart na modelo ay hindi suportado.',
@@ -217,6 +224,7 @@ const PindotI18n = (() => {
         card2Body: `<p>You'll need the TV's IP address (e.g. <code>192.168.1.50</code>) to type into "Add TV":</p>
         <ul>
           <li><strong>Roku:</strong> Settings &rarr; Network &rarr; About. The "IP address" is shown here.</li>
+          <li><strong>TCL (Roku TV):</strong> Settings &rarr; Network &rarr; About. The "IP address" is shown here - same as Roku. (TCL Google TV / Android TV models are not supported.)</li>
           <li><strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, or Settings &rarr; Support &rarr; About This TV.</li>
           <li><strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; select the connected network &rarr; the IP address is shown (sometimes called "Network Status").</li>
           <li><strong>Devant (webOS / STW series):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; select the connected network &rarr; the IP address is shown. Setup is the same as LG webOS.</li>
@@ -232,6 +240,11 @@ const PindotI18n = (() => {
             <td>Roku TV / Stick</td>
             <td><span class="badge badge-good">Most Reliable</span></td>
             <td>Uses Roku ECP (port 8060). But since Roku is HTTP only (not HTTPS), the browser may block it - see #4 below.</td>
+          </tr>
+          <tr>
+            <td>TCL (Roku TV)</td>
+            <td><span class="badge badge-good">Most Reliable</span></td>
+            <td>TCL Roku TV models run genuine Roku OS, so the same ECP (port 8060) and "Mixed Content" caveat in #4 apply. TCL Google TV / Android TV models are not supported.</td>
           </tr>
           <tr>
             <td>Samsung Smart TV (Tizen, 2016+)</td>
@@ -331,6 +344,7 @@ const PindotI18n = (() => {
       },
       brandHints: {
         roku: '<strong>Roku:</strong> Settings &rarr; Network &rarr; About. Find the "IP address" (e.g. 192.168.1.50). Make sure "Control by mobile apps / Network access" is enabled in Settings &rarr; System &rarr; Advanced system settings.',
+        tcl: '<strong>TCL (Roku TV):</strong> Only TCL Roku TV models are supported - they run genuine Roku OS, so setup is the same as Roku: connect to the same WiFi, no pairing needed. TCL Google TV / Android TV models are not supported.',
         samsung: '<strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, or Settings &rarr; Support &rarr; About This TV. On first use, an "Allow connection?" prompt will appear on the TV - accept it right away (within ~25 seconds).',
         lg: '<strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; select the connected network to see the IP. On first use, a "Connect?" prompt will appear on the TV - accept it right away.',
         devant: '<strong>Devant Smart TV (newer webOS / "STW" series):</strong> These run on the same webOS platform LG licenses, so setup is the same - enable "LG Connect Apps" / "Mobile TV On" in TV settings, then accept the "Connect?" prompt that appears on the TV screen. Older Devant models (VIDAA OS) or basic/non-smart sets are not supported.',

@@ -111,6 +111,14 @@ const TVProtocols = (() => {
   };
 
   // ----------------------------------------------------------------------
+  // TCL - "TCL Roku TV" models run genuine Roku OS, so they speak the
+  // exact same External Control Protocol (ECP) on port 8060 as Roku
+  // devices. TCL Google TV / Android TV models are not supported - see
+  // the Help / compatibility table.
+  // ----------------------------------------------------------------------
+  const tcl = roku;
+
+  // ----------------------------------------------------------------------
   // SAMSUNG - Tizen WebSocket remote API (port 8001 plain / 8002 TLS)
   // wss://<ip>:8002/api/v2/channels/samsung.remote.control?name=<base64>
   // ----------------------------------------------------------------------
@@ -651,7 +659,7 @@ const TVProtocols = (() => {
   // ----------------------------------------------------------------------
   // Unified dispatch
   // ----------------------------------------------------------------------
-  const BRANDS = { roku, samsung, lg, sony, panasonic, devant };
+  const BRANDS = { roku, samsung, lg, sony, panasonic, devant, tcl };
 
   function isDigitKey(key) {
     return /^[0-9]$/.test(key);
@@ -674,5 +682,5 @@ const TVProtocols = (() => {
     return proto.testConnection(device, onTokenUpdate);
   }
 
-  return { roku, samsung, lg, sony, panasonic, devant, sendKey, testConnection, withTimeout };
+  return { roku, samsung, lg, sony, panasonic, devant, tcl, sendKey, testConnection, withTimeout };
 })();

@@ -5,7 +5,7 @@
  * straight through untouched.
  */
 
-const CACHE_NAME = 'pindottv-cache-v4';
+const CACHE_NAME = 'pindottv-cache-v5';
 
 const APP_SHELL = [
   './',
