@@ -5,18 +5,14 @@
 (() => {
   const BRAND_LABELS = { roku: 'Roku', samsung: 'Samsung', lg: 'LG' };
 
-  const BRAND_HINTS = {
-    roku: '<strong>Roku:</strong> Settings &rarr; Network &rarr; About. Hanapin ang "IP address" (hal. 192.168.1.50). Siguraduhing nakabukas ang "Control by mobile apps / Network access" sa Settings &rarr; System &rarr; Advanced system settings.',
-    samsung: '<strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, o Settings &rarr; Support &rarr; About This TV. Sa unang gamit, lalabas ang "Allow connection?" sa TV - tanggapin agad (within ~25 seconds).',
-    lg: '<strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; piliin ang konektadong network para makita ang IP. Sa unang gamit, may lalabas na "Connect?" prompt sa TV - tanggapin agad.',
-  };
-
   const byId = (id) => document.getElementById(id);
 
   const els = {
     headerStatusDot: byId('headerStatusDot'),
     headerDeviceName: byId('headerDeviceName'),
     switchBtn: byId('switchBtn'),
+    langToggleBtn: byId('langToggleBtn'),
+    langToggleLabel: byId('langToggleLabel'),
 
     remoteEmpty: byId('remoteEmpty'),
     remoteControls: byId('remoteControls'),
@@ -108,7 +104,7 @@
       els.headerDeviceName.textContent = device.name;
       els.headerStatusDot.dataset.status = device.lastStatus || 'unknown';
     } else {
-      els.headerDeviceName.textContent = 'Walang TV';
+      els.headerDeviceName.textContent = PindotI18n.t('header.noTv');
       els.headerStatusDot.dataset.status = 'unknown';
     }
   }
@@ -129,7 +125,7 @@
 
   function renderDeviceList() {
     if (!state.devices.length) {
-      els.deviceList.innerHTML = '<p class="muted-empty">Wala ka pang naka-save na TV. I-tap ang button sa baba para magdagdag.</p>';
+      els.deviceList.innerHTML = `<p class="muted-empty">${PindotI18n.t('tvs.empty')}</p>`;
       return;
     }
     els.deviceList.innerHTML = state.devices.map((d) => deviceCardHtml(d, d.id === state.activeId)).join('');
@@ -141,14 +137,14 @@
         <div class="device-card-main" data-action="select">
           <span class="status-dot" data-status="${device.lastStatus || 'unknown'}"></span>
           <div class="device-card-info">
-            <div class="device-card-name">${escapeHtml(device.name)} ${isActive ? '<span class="active-badge">Active</span>' : ''}</div>
+            <div class="device-card-name">${escapeHtml(device.name)} ${isActive ? `<span class="active-badge">${PindotI18n.t('tvs.active')}</span>` : ''}</div>
             <div class="device-card-meta">${brandLabel(device.brand)} · ${escapeHtml(device.ip)}</div>
           </div>
         </div>
         <div class="device-card-actions">
-          <button class="icon-btn" data-action="test" aria-label="I-test ang koneksyon"><svg class="icon"><use href="#icon-wifi"></use></svg></button>
-          <button class="icon-btn" data-action="edit" aria-label="I-edit"><svg class="icon"><use href="#icon-edit"></use></svg></button>
-          <button class="icon-btn danger" data-action="delete" aria-label="Tanggalin"><svg class="icon"><use href="#icon-trash"></use></svg></button>
+          <button class="icon-btn" data-action="test" aria-label="${PindotI18n.t('tvs.testAria')}"><svg class="icon"><use href="#icon-wifi"></use></svg></button>
+          <button class="icon-btn" data-action="edit" aria-label="${PindotI18n.t('tvs.editAria')}"><svg class="icon"><use href="#icon-edit"></use></svg></button>
+          <button class="icon-btn danger" data-action="delete" aria-label="${PindotI18n.t('tvs.deleteAria')}"><svg class="icon"><use href="#icon-trash"></use></svg></button>
         </div>
       </div>`;
   }
@@ -181,27 +177,27 @@
     const brand = brandLabel(device.brand);
 
     if (code === 'pair-timeout') {
-      return `Walang sagot sa pairing prompt ng ${brand} TV. Buksan ang TV at tanggapin ang "Allow/Connect" sa loob ng ilang segundo, tapos subukan ulit.`;
+      return PindotI18n.t('errors.pairTimeout', { brand });
     }
     if (code === 'unauthorized') {
-      return `Tinanggihan ng ${brand} TV ang koneksyon. Subukan ulit at tanggapin ang prompt sa TV screen.`;
+      return PindotI18n.t('errors.unauthorized', { brand });
     }
     if (code === 'unsupported') {
-      return 'Hindi pa suportado ang button na ito para sa brand ng TV mo.';
+      return PindotI18n.t('errors.unsupported');
     }
     if (code === 'timeout' || code === 'network' || code === 'ws-error') {
       if (device.brand === 'roku') {
-        return 'Hindi makonekta sa Roku. Tingnan: (1) tama ba ang IP, (2) bukas ba ang TV, (3) same WiFi ba kayo. Posible ring naharang ito ng browser ("Mixed Content") - buksan ang Tulong tab.';
+        return PindotI18n.t('errors.rokuConnFail');
       }
-      return `Hindi makonekta sa ${brand} TV. Tingnan kung same WiFi kayo at tama ang IP. Kung first time, posibleng kailangan munang tanggapin ang certificate - buksan ang Tulong tab para sa solusyon.`;
+      return PindotI18n.t('errors.genericConnFail', { brand });
     }
-    return 'Hindi gumana ang command. Buksan ang Tulong tab para sa mga posibleng dahilan.';
+    return PindotI18n.t('errors.commandFailed');
   }
 
   async function handleKeyPress(key) {
     const device = PindotStorage.getActiveDevice();
     if (!device) {
-      showToast('Wala pang TV - mag-add muna sa "Mga TV" tab.', 'warn');
+      showToast(PindotI18n.t('toast.noTvAddFirst'), 'warn');
       switchView('tvs');
       return;
     }
@@ -248,7 +244,7 @@
     try {
       await TVProtocols.testConnection(device, makeTokenUpdater(deviceId));
       setDeviceStatus(deviceId, 'online');
-      showToast(`Connected sa "${device.name}"!`, 'success');
+      showToast(PindotI18n.t('toast.connected', { name: device.name }), 'success');
     } catch (err) {
       setDeviceStatus(deviceId, 'offline');
       showToast(friendlyError(device, err), 'error');
@@ -268,7 +264,7 @@
         PindotStorage.setActiveDeviceId(id);
         refreshState();
         render();
-        showToast(`Active na ang "${PindotStorage.getDevice(id).name}"`, 'success');
+        showToast(PindotI18n.t('toast.deviceActive', { name: PindotStorage.getDevice(id).name }), 'success');
         switchView('remote');
       } else if (action === 'test') {
         testDeviceConnection(id);
@@ -276,11 +272,11 @@
         openTvModal(id);
       } else if (action === 'delete') {
         const device = PindotStorage.getDevice(id);
-        if (device && confirm(`Tanggalin ang "${device.name}"?`)) {
+        if (device && confirm(PindotI18n.t('toast.deleteConfirm', { name: device.name }))) {
           PindotStorage.deleteDevice(id);
           refreshState();
           render();
-          showToast('Tinanggal ang TV.', '');
+          showToast(PindotI18n.t('toast.deleted'), '');
         }
       }
     });
@@ -288,12 +284,12 @@
 
   // ---------------- Add / Edit TV modal ----------------
   function updateBrandHint() {
-    els.brandHint.innerHTML = BRAND_HINTS[els.tvBrand.value] || '';
+    els.brandHint.innerHTML = PindotI18n.t('brandHints.' + els.tvBrand.value) || '';
   }
 
   function openTvModal(deviceId) {
     const isEdit = !!deviceId;
-    els.tvModalTitle.textContent = isEdit ? 'I-edit ang TV' : 'Magdagdag ng TV';
+    els.tvModalTitle.textContent = isEdit ? PindotI18n.t('modal.editTitle') : PindotI18n.t('modal.addTitle');
     if (isEdit) {
       const device = PindotStorage.getDevice(deviceId);
       els.tvId.value = device.id;
@@ -337,7 +333,7 @@
 
       if (!name || !ip) return;
       if (!isValidIp(ip)) {
-        showToast('Mali ang format ng IP address (hal. 192.168.1.50).', 'warn');
+        showToast(PindotI18n.t('toast.invalidIp'), 'warn');
         return;
       }
 
@@ -351,7 +347,7 @@
       refreshState();
       render();
       closeTvModal();
-      showToast('Na-save ang TV!', 'success');
+      showToast(PindotI18n.t('toast.saved'), 'success');
       switchView('remote');
     });
   }
@@ -367,7 +363,7 @@
         <div class="device-card-main">
           <span class="status-dot" data-status="${d.lastStatus || 'unknown'}"></span>
           <div class="device-card-info">
-            <div class="device-card-name">${escapeHtml(d.name)} ${d.id === state.activeId ? '<span class="active-badge">Active</span>' : ''}</div>
+            <div class="device-card-name">${escapeHtml(d.name)} ${d.id === state.activeId ? `<span class="active-badge">${PindotI18n.t('tvs.active')}</span>` : ''}</div>
             <div class="device-card-meta">${brandLabel(d.brand)} · ${escapeHtml(d.ip)}</div>
           </div>
         </div>
@@ -400,6 +396,30 @@
     });
   }
 
+  // ---------------- Language toggle ----------------
+  function updateLangToggleLabel() {
+    els.langToggleLabel.textContent = PindotI18n.getLang() === 'en' ? 'TL' : 'EN';
+  }
+
+  function bindLangToggle() {
+    updateLangToggleLabel();
+    els.langToggleBtn.addEventListener('click', () => {
+      const next = PindotI18n.getLang() === 'en' ? 'fil' : 'en';
+      PindotI18n.setLang(next);
+      updateLangToggleLabel();
+      render();
+
+      if (!els.tvModalOverlay.classList.contains('hidden')) {
+        els.tvModalTitle.textContent = els.tvId.value ? PindotI18n.t('modal.editTitle') : PindotI18n.t('modal.addTitle');
+        updateBrandHint();
+      }
+      if (!els.switchModalOverlay.classList.contains('hidden')) {
+        openSwitchModal();
+      }
+      vibrate(10);
+    });
+  }
+
   // ---------------- Init ----------------
   function init() {
     refreshState();
@@ -408,6 +428,7 @@
     bindTvModal();
     bindSwitchModal();
     bindDeviceListEvents();
+    bindLangToggle();
     render();
   }
 

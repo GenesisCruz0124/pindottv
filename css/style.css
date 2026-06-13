@@ -97,6 +97,33 @@ button {
   color: var(--accent);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.lang-btn:active {
+  background: var(--surface-3);
+}
+
 .switch-btn {
   display: flex;
   align-items: center;
@@ -109,6 +136,7 @@ button {
   font-size: 0.85rem;
   font-weight: 600;
   max-width: 60%;
+  min-width: 0;
   cursor: pointer;
 }
 

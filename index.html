@@ -40,6 +40,7 @@
     <symbol id="icon-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1.3.9-1.3 2" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></symbol>
     <symbol id="icon-replay" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M3 4v5h5" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="icon-backspace" viewBox="0 0 24 24"><path d="M9 6h11v12H9l-6-6 6-6z" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linejoin="round"/><path d="M13 10l4 4m0-4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M3 12h18M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9z" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
   </svg>
 
   <div class="app">
@@ -48,11 +49,17 @@
         <img src="icons/icon-192.png" alt="" class="brand-icon" width="32" height="32" />
         <span class="brand-name">Pindot<strong>TV</strong></span>
       </div>
-      <button class="switch-btn" id="switchBtn" type="button" aria-label="Pumili ng TV">
-        <span class="status-dot" id="headerStatusDot" data-status="unknown"></span>
-        <span id="headerDeviceName">Walang TV</span>
-        <svg class="icon icon-sm"><use href="#icon-chevron-down"></use></svg>
-      </button>
+      <div class="header-actions">
+        <button class="lang-btn" id="langToggleBtn" type="button" data-i18n-aria-label="header.langToggle" aria-label="Palitan ang wika">
+          <svg class="icon icon-sm"><use href="#icon-globe"></use></svg>
+          <span id="langToggleLabel">EN</span>
+        </button>
+        <button class="switch-btn" id="switchBtn" type="button" data-i18n-aria-label="header.chooseTv" aria-label="Pumili ng TV">
+          <span class="status-dot" id="headerStatusDot" data-status="unknown"></span>
+          <span id="headerDeviceName" data-i18n="header.noTv">Walang TV</span>
+          <svg class="icon icon-sm"><use href="#icon-chevron-down"></use></svg>
+        </button>
+      </div>
     </header>
 
     <main class="views">
@@ -60,11 +67,11 @@
       <section class="view active" id="view-remote" data-view="remote">
         <div id="remoteEmpty" class="empty-state hidden">
           <svg class="icon icon-xl"><use href="#icon-tv"></use></svg>
-          <h2>Wala ka pang TV</h2>
-          <p>Mag-add muna ng TV para magamit ang remote. I-tap ang button sa baba.</p>
+          <h2 data-i18n="remote.emptyTitle">Wala ka pang TV</h2>
+          <p data-i18n="remote.emptyText">Mag-add muna ng TV para magamit ang remote. I-tap ang button sa baba.</p>
           <button class="btn btn-primary" id="goAddTvBtn" type="button">
             <svg class="icon"><use href="#icon-plus"></use></svg>
-            Magdagdag ng TV
+            <span data-i18n="remote.addTv">Magdagdag ng TV</span>
           </button>
         </div>
 
@@ -77,7 +84,7 @@
                 <div class="adb-meta" id="remoteDeviceMeta">Brand · IP</div>
               </div>
             </div>
-            <button class="btn btn-ghost btn-sm" id="testConnectionBtn" type="button">I-test</button>
+            <button class="btn btn-ghost btn-sm" id="testConnectionBtn" type="button" data-i18n="remote.test">I-test</button>
           </div>
 
           <div class="remote-row top-row">
@@ -92,11 +99,11 @@
           </div>
 
           <div class="dpad">
-            <button class="dbtn dbtn-up" data-key="up" aria-label="Pataas"><svg class="icon"><use href="#icon-up"></use></svg></button>
-            <button class="dbtn dbtn-left" data-key="left" aria-label="Pakaliwa"><svg class="icon"><use href="#icon-left"></use></svg></button>
+            <button class="dbtn dbtn-up" data-key="up" data-i18n-aria-label="remote.dpadUp" aria-label="Pataas"><svg class="icon"><use href="#icon-up"></use></svg></button>
+            <button class="dbtn dbtn-left" data-key="left" data-i18n-aria-label="remote.dpadLeft" aria-label="Pakaliwa"><svg class="icon"><use href="#icon-left"></use></svg></button>
             <button class="dbtn dbtn-ok" data-key="select" aria-label="OK">OK</button>
-            <button class="dbtn dbtn-right" data-key="right" aria-label="Pakanan"><svg class="icon"><use href="#icon-right"></use></svg></button>
-            <button class="dbtn dbtn-down" data-key="down" aria-label="Pababa"><svg class="icon"><use href="#icon-down"></use></svg></button>
+            <button class="dbtn dbtn-right" data-key="right" data-i18n-aria-label="remote.dpadRight" aria-label="Pakanan"><svg class="icon"><use href="#icon-right"></use></svg></button>
+            <button class="dbtn dbtn-down" data-key="down" data-i18n-aria-label="remote.dpadDown" aria-label="Pababa"><svg class="icon"><use href="#icon-down"></use></svg></button>
           </div>
 
           <div class="remote-row nav-row">
@@ -128,7 +135,7 @@
               <button class="rbtn rocker-btn" data-key="channelUp" aria-label="Channel Up">
                 <svg class="icon"><use href="#icon-plus"></use></svg>
               </button>
-              <button class="rbtn rocker-btn rocker-mid" id="numpadToggle" type="button" aria-label="Numero" aria-expanded="false">123</button>
+              <button class="rbtn rocker-btn rocker-mid" id="numpadToggle" type="button" data-i18n-aria-label="remote.numbers" aria-label="Numero" aria-expanded="false">123</button>
               <button class="rbtn rocker-btn" data-key="channelDown" aria-label="Channel Down">
                 <span class="minus">&minus;</span>
               </button>
@@ -157,44 +164,48 @@
       <!-- ===================== MGA TV VIEW ===================== -->
       <section class="view" id="view-tvs" data-view="tvs">
         <div class="view-header">
-          <h2>Mga TV</h2>
-          <p>I-save ang mga TV mo dito para mabilis mag-switch. Pindot lang para gamitin.</p>
+          <h2 data-i18n="tvs.heading">Mga TV</h2>
+          <p data-i18n="tvs.desc">I-save ang mga TV mo dito para mabilis mag-switch. Pindot lang para gamitin.</p>
         </div>
 
         <div id="deviceList" class="device-list"></div>
 
         <button class="btn btn-primary btn-block" id="addTvBtn" type="button">
           <svg class="icon"><use href="#icon-plus"></use></svg>
-          Magdagdag ng Bagong TV
+          <span data-i18n="tvs.addNew">Magdagdag ng Bagong TV</span>
         </button>
       </section>
 
       <!-- ===================== PAANO GUMAGANA VIEW ===================== -->
       <section class="view" id="view-help" data-view="help">
         <div class="view-header">
-          <h2>Paano Gumagana</h2>
-          <p>Basahin muna ito bago gamitin ang PindotTV - para alam mo ang gagana at hindi.</p>
+          <h2 data-i18n="help.heading">Paano Gumagana</h2>
+          <p data-i18n="help.desc">Basahin muna ito bago gamitin ang PindotTV - para alam mo ang gagana at hindi.</p>
         </div>
 
         <div class="help-content">
           <article class="help-card">
-            <h3>1. Sigurado: parehong WiFi</h3>
-            <p>Dapat <strong>konektado sa parehong WiFi network</strong> ang phone mo at ang Smart TV. Hindi gagana ang PindotTV kung iba ang network (hal. mobile data sa phone, WiFi sa TV).</p>
+            <h3 data-i18n="help.card1Title">1. Sigurado: parehong WiFi</h3>
+            <div data-i18n-html="help.card1Body">
+              <p>Dapat <strong>konektado sa parehong WiFi network</strong> ang phone mo at ang Smart TV. Hindi gagana ang PindotTV kung iba ang network (hal. mobile data sa phone, WiFi sa TV).</p>
+            </div>
           </article>
 
           <article class="help-card">
-            <h3>2. Paano makita ang IP Address ng TV</h3>
-            <p>Kailangan mo ang IP address ng TV (hal. <code>192.168.1.50</code>) para ito i-type sa "Magdagdag ng TV":</p>
-            <ul>
-              <li><strong>Roku:</strong> Settings → Network → About. Makikita dito ang "IP address".</li>
-              <li><strong>Samsung (Tizen):</strong> Settings → General → Network → Network Status, o Settings → Support → About This TV.</li>
-              <li><strong>LG (webOS):</strong> Settings → All Settings → Connection → Wi-Fi → piliin ang connected network → makikita ang IP address (minsan tinatawag na "Network Status").</li>
-            </ul>
+            <h3 data-i18n="help.card2Title">2. Paano makita ang IP Address ng TV</h3>
+            <div data-i18n-html="help.card2Body">
+              <p>Kailangan mo ang IP address ng TV (hal. <code>192.168.1.50</code>) para ito i-type sa "Magdagdag ng TV":</p>
+              <ul>
+                <li><strong>Roku:</strong> Settings → Network → About. Makikita dito ang "IP address".</li>
+                <li><strong>Samsung (Tizen):</strong> Settings → General → Network → Network Status, o Settings → Support → About This TV.</li>
+                <li><strong>LG (webOS):</strong> Settings → All Settings → Connection → Wi-Fi → piliin ang connected network → makikita ang IP address (minsan tinatawag na "Network Status").</li>
+              </ul>
+            </div>
           </article>
 
           <article class="help-card">
-            <h3>3. Alin ang Pinaka-Gumagana (Compatibility)</h3>
-            <table class="compat-table">
+            <h3 data-i18n="help.card3Title">3. Alin ang Pinaka-Gumagana (Compatibility)</h3>
+            <table class="compat-table" data-i18n-html="help.card3Table">
               <thead>
                 <tr><th>Brand</th><th>Status</th><th>Paliwanag</th></tr>
               </thead>
@@ -224,38 +235,46 @@
           </article>
 
           <article class="help-card help-card-warning">
-            <h3>4. MAHALAGA: "Mixed Content" na hadlang</h3>
-            <p>Ang PindotTV ay naka-host sa <strong>secure na HTTPS</strong> (GitHub Pages). Pero ang Roku ECP ay <strong>HTTP lang</strong> sa loob ng inyong WiFi. Pinipigilan ng mga browser (lalo na Chrome) ang "secure" page na mag-request sa "insecure" address - ito ang tawag na <em>Mixed Content</em>.</p>
-            <p><strong>Paano malalampasan (workaround):</strong></p>
-            <ol>
-              <li>Sa Chrome (Android o Desktop), i-tap ang <strong>lock/info icon</strong> sa tabi ng address bar.</li>
-              <li>Pumunta sa <strong>"Site settings"</strong>.</li>
-              <li>Hanapin ang <strong>"Insecure content"</strong> at palitan sa <strong>"Allow"</strong>.</li>
-              <li>I-reload ang PindotTV at subukan ulit ang remote.</li>
-            </ol>
-            <p class="muted">Kung wala ang option na ito sa browser mo, posibleng hindi gumana ang direct connection - pero gagana pa rin ang pag-save ng mga TV at ang ibang parte ng app.</p>
+            <h3 data-i18n="help.card4Title">4. MAHALAGA: "Mixed Content" na hadlang</h3>
+            <div data-i18n-html="help.card4Body">
+              <p>Ang PindotTV ay naka-host sa <strong>secure na HTTPS</strong> (GitHub Pages). Pero ang Roku ECP ay <strong>HTTP lang</strong> sa loob ng inyong WiFi. Pinipigilan ng mga browser (lalo na Chrome) ang "secure" page na mag-request sa "insecure" address - ito ang tawag na <em>Mixed Content</em>.</p>
+              <p><strong>Paano malalampasan (workaround):</strong></p>
+              <ol>
+                <li>Sa Chrome (Android o Desktop), i-tap ang <strong>lock/info icon</strong> sa tabi ng address bar.</li>
+                <li>Pumunta sa <strong>"Site settings"</strong>.</li>
+                <li>Hanapin ang <strong>"Insecure content"</strong> at palitan sa <strong>"Allow"</strong>.</li>
+                <li>I-reload ang PindotTV at subukan ulit ang remote.</li>
+              </ol>
+              <p class="muted">Kung wala ang option na ito sa browser mo, posibleng hindi gumana ang direct connection - pero gagana pa rin ang pag-save ng mga TV at ang ibang parte ng app.</p>
+            </div>
           </article>
 
           <article class="help-card help-card-warning">
-            <h3>5. Samsung / LG: "Hindi Pinagkakatiwalaang Certificate"</h3>
-            <p>Ang Samsung at LG ay gumagamit ng <em>self-signed certificate</em> sa kanilang local WebSocket server, kaya bababala ang browser. Para tanggapin ito:</p>
-            <ol>
-              <li>Buksan ang isang bagong tab.</li>
-              <li>Pumunta sa <code>https://[IP-ng-TV]:8002</code> (Samsung) o <code>https://[IP-ng-TV]:3001</code> (LG).</li>
-              <li>Lalabas ang babala na "Hindi Secure" - piliin ang <strong>"Advanced" → "Proceed anyway / Tuloy pa rin"</strong>.</li>
-              <li>Bumalik sa PindotTV at i-tap ulit ang "I-test" o ang remote button.</li>
-              <li>Tingnan ang TV screen - lalabas ang <strong>pairing prompt</strong> ("Allow PindotTV to connect?"). Piliin ang <strong>"Allow / Oo"</strong> agad.</li>
-            </ol>
+            <h3 data-i18n="help.card5Title">5. Samsung / LG: "Hindi Pinagkakatiwalaang Certificate"</h3>
+            <div data-i18n-html="help.card5Body">
+              <p>Ang Samsung at LG ay gumagamit ng <em>self-signed certificate</em> sa kanilang local WebSocket server, kaya bababala ang browser. Para tanggapin ito:</p>
+              <ol>
+                <li>Buksan ang isang bagong tab.</li>
+                <li>Pumunta sa <code>https://[IP-ng-TV]:8002</code> (Samsung) o <code>https://[IP-ng-TV]:3001</code> (LG).</li>
+                <li>Lalabas ang babala na "Hindi Secure" - piliin ang <strong>"Advanced" → "Proceed anyway / Tuloy pa rin"</strong>.</li>
+                <li>Bumalik sa PindotTV at i-tap ulit ang "I-test" o ang remote button.</li>
+                <li>Tingnan ang TV screen - lalabas ang <strong>pairing prompt</strong> ("Allow PindotTV to connect?"). Piliin ang <strong>"Allow / Oo"</strong> agad.</li>
+              </ol>
+            </div>
           </article>
 
           <article class="help-card">
-            <h3>6. Paano gumagana ang "I-test" (Connection Test)</h3>
-            <p>Sinusubukan ng PindotTV na kumonekta sa IP address ng TV. Kung successful ang koneksyon, magiging <span class="status-dot inline" data-status="online"></span> <strong>berde (online)</strong> ang indicator. Kung walang response o naharang, magiging <span class="status-dot inline" data-status="offline"></span> <strong>pula (offline)</strong> ito. Hindi ito 100% guarantee - posibleng tama ang IP pero naka-block ng browser security.</p>
+            <h3 data-i18n="help.card6Title">6. Paano gumagana ang "I-test" (Connection Test)</h3>
+            <div data-i18n-html="help.card6Body">
+              <p>Sinusubukan ng PindotTV na kumonekta sa IP address ng TV. Kung successful ang koneksyon, magiging <span class="status-dot inline" data-status="online"></span> <strong>berde (online)</strong> ang indicator. Kung walang response o naharang, magiging <span class="status-dot inline" data-status="offline"></span> <strong>pula (offline)</strong> ito. Hindi ito 100% guarantee - posibleng tama ang IP pero naka-block ng browser security.</p>
+            </div>
           </article>
 
           <article class="help-card">
-            <h3>7. Privacy</h3>
-            <p>Lahat ng impormasyon ng TV mo (pangalan, IP address) ay naka-save lang <strong>sa device mo</strong> (localStorage ng browser). Walang ipinapadalang data sa server o sa ibang tao.</p>
+            <h3 data-i18n="help.card7Title">7. Privacy</h3>
+            <div data-i18n-html="help.card7Body">
+              <p>Lahat ng impormasyon ng TV mo (pangalan, IP address) ay naka-save lang <strong>sa device mo</strong> (localStorage ng browser). Walang ipinapadalang data sa server o sa ibang tao.</p>
+            </div>
           </article>
         </div>
       </section>
@@ -268,11 +287,11 @@
       </button>
       <button class="nav-btn" data-view="tvs" type="button">
         <svg class="icon"><use href="#icon-tv"></use></svg>
-        <span>Mga TV</span>
+        <span data-i18n="nav.tvs">Mga TV</span>
       </button>
       <button class="nav-btn" data-view="help" type="button">
         <svg class="icon"><use href="#icon-help"></use></svg>
-        <span>Tulong</span>
+        <span data-i18n="nav.help">Tulong</span>
       </button>
     </nav>
   </div>
@@ -282,19 +301,19 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tvModalTitle">
       <div class="modal-head">
         <h3 id="tvModalTitle">Magdagdag ng TV</h3>
-        <button class="icon-btn" id="tvModalClose" type="button" aria-label="Isara">
+        <button class="icon-btn" id="tvModalClose" type="button" data-i18n-aria-label="modal.close" aria-label="Isara">
           <svg class="icon"><use href="#icon-close"></use></svg>
         </button>
       </div>
       <form id="tvForm">
         <input type="hidden" id="tvId" value="" />
         <label class="field">
-          <span>Pangalan ng TV</span>
-          <input type="text" id="tvName" placeholder="hal. TV sa Sala" required maxlength="30" autocomplete="off" />
+          <span data-i18n="modal.nameLabel">Pangalan ng TV</span>
+          <input type="text" id="tvName" data-i18n-placeholder="modal.namePlaceholder" placeholder="hal. TV sa Sala" required maxlength="30" autocomplete="off" />
         </label>
 
         <label class="field">
-          <span>Brand</span>
+          <span data-i18n="modal.brandLabel">Brand</span>
           <select id="tvBrand">
             <option value="roku">Roku (TV / Streaming Stick)</option>
             <option value="samsung">Samsung (Tizen Smart TV)</option>
@@ -303,8 +322,8 @@
         </label>
 
         <label class="field">
-          <span>IP Address ng TV</span>
-          <input type="text" id="tvIp" placeholder="hal. 192.168.1.50" required
+          <span data-i18n="modal.ipLabel">IP Address ng TV</span>
+          <input type="text" id="tvIp" data-i18n-placeholder="modal.ipPlaceholder" placeholder="hal. 192.168.1.50" required
                  pattern="^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$"
                  inputmode="decimal" autocomplete="off" />
         </label>
@@ -313,7 +332,7 @@
 
         <div class="modal-actions">
           <button type="button" class="btn btn-ghost" id="tvCancelBtn">Cancel</button>
-          <button type="submit" class="btn btn-primary" id="tvSaveBtn">I-save</button>
+          <button type="submit" class="btn btn-primary" id="tvSaveBtn" data-i18n="modal.save">I-save</button>
         </div>
       </form>
     </div>
@@ -323,13 +342,13 @@
   <div class="modal-overlay hidden" id="switchModalOverlay">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="switchModalTitle">
       <div class="modal-head">
-        <h3 id="switchModalTitle">Piliin ang TV</h3>
-        <button class="icon-btn" id="switchModalClose" type="button" aria-label="Isara">
+        <h3 id="switchModalTitle" data-i18n="switchModal.title">Piliin ang TV</h3>
+        <button class="icon-btn" id="switchModalClose" type="button" data-i18n-aria-label="modal.close" aria-label="Isara">
           <svg class="icon"><use href="#icon-close"></use></svg>
         </button>
       </div>
       <div id="switchList" class="device-list"></div>
-      <button class="btn btn-ghost btn-block" id="switchManageBtn" type="button">Pamahalaan ang mga TV</button>
+      <button class="btn btn-ghost btn-block" id="switchManageBtn" type="button" data-i18n="switchModal.manage">Pamahalaan ang mga TV</button>
     </div>
   </div>
 
@@ -339,13 +358,14 @@
   <!-- ===================== INSTALL BANNER ===================== -->
   <div id="installBanner" class="install-banner hidden">
     <svg class="icon"><use href="#icon-tv"></use></svg>
-    <span class="install-text" id="installText">I-install ang PindotTV sa home screen para parang totoong app!</span>
-    <button id="installBtn" class="btn btn-primary btn-sm" type="button">I-install</button>
-    <button id="installDismiss" class="icon-btn" type="button" aria-label="Isara">
+    <span class="install-text" id="installText" data-i18n="install.text">I-install ang PindotTV sa home screen para parang totoong app!</span>
+    <button id="installBtn" class="btn btn-primary btn-sm" type="button" data-i18n="install.btn">I-install</button>
+    <button id="installDismiss" class="icon-btn" type="button" data-i18n-aria-label="modal.close" aria-label="Isara">
       <svg class="icon"><use href="#icon-close"></use></svg>
     </button>
   </div>
 
+  <script src="js/i18n.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/tv-protocols.js"></script>
   <script src="js/app.js"></script>

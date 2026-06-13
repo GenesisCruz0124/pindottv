@@ -5,13 +5,14 @@
  * straight through untouched.
  */
 
-const CACHE_NAME = 'pindottv-cache-v1';
+const CACHE_NAME = 'pindottv-cache-v2';
 
 const APP_SHELL = [
   './',
   'index.html',
   'manifest.json',
   'css/style.css',
+  'js/i18n.js',
   'js/storage.js',
   'js/tv-protocols.js',
   'js/app.js',

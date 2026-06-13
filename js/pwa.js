@@ -11,6 +11,19 @@
   const DISMISS_KEY = 'pindottv.installDismissed';
 
   let deferredPrompt = null;
+  let installMode = null; // 'prompt' | 'ios'
+
+  function applyInstallTexts() {
+    if (installMode === 'prompt') {
+      installText.textContent = PindotI18n.t('install.text');
+      installBtn.textContent = PindotI18n.t('install.btn');
+    } else if (installMode === 'ios') {
+      installText.textContent = PindotI18n.t('install.iosText');
+      installBtn.textContent = PindotI18n.t('install.iosBtn');
+    }
+  }
+
+  document.addEventListener('pindottv:langchange', applyInstallTexts);
 
   function isStandalone() {
     return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -42,8 +55,8 @@
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    installText.textContent = 'I-install ang PindotTV sa home screen para parang totoong app!';
-    installBtn.textContent = 'I-install';
+    installMode = 'prompt';
+    applyInstallTexts();
     showBanner();
   });
 
@@ -57,7 +70,7 @@
       return;
     }
     if (isIOS()) {
-      alert('Paano i-install sa iPhone/iPad:\n\n1. I-tap ang Share button (kahon na may pataas na arrow) sa Safari.\n2. I-scroll pababa at piliin ang "Add to Home Screen".\n3. I-tap ang "Add".');
+      alert(PindotI18n.t('install.iosAlert'));
     }
   });
 
@@ -68,8 +81,8 @@
 
   // iOS Safari never fires beforeinstallprompt - show manual instructions instead
   if (isIOS() && !isStandalone() && !isDismissed()) {
-    installText.textContent = 'I-install sa iPhone/iPad: tap ang Share button sa Safari, piliin ang "Add to Home Screen".';
-    installBtn.textContent = 'Paano?';
+    installMode = 'ios';
+    applyInstallTexts();
     showBanner();
   }
 
