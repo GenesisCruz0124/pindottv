@@ -466,9 +466,183 @@ const TVProtocols = (() => {
   };
 
   // ----------------------------------------------------------------------
+  // SONY - Bravia / Android TV, IRCC-IP over HTTP (port 80)
+  // https://pro-bravia.sony.net/develop/integrate/ircc-ip/
+  // Requires "IP Control" with a Pre-Shared Key (PSK) enabled on the TV.
+  // The SOAPACTION / X-Auth-PSK headers may be stripped by the browser in
+  // no-cors mode, so this is best-effort (see "Paano Gumagana" / Help).
+  // ----------------------------------------------------------------------
+  const sony = {
+    IRCC_CODE: {
+      power: 'AAAAAQAAAAEAAAAVAw==',
+      home: 'AAAAAQAAAAEAAAAkAw==',
+      back: 'AAAAAgAAAJcAAAAjAw==',
+      select: 'AAAAAQAAAAEAAABlAw==',
+      ok: 'AAAAAQAAAAEAAABlAw==',
+      up: 'AAAAAQAAAAEAAAB0Aw==',
+      down: 'AAAAAQAAAAEAAAB1Aw==',
+      left: 'AAAAAQAAAAEAAAA0Aw==',
+      right: 'AAAAAQAAAAEAAAAzAw==',
+      volumeUp: 'AAAAAQAAAAEAAAASAw==',
+      volumeDown: 'AAAAAQAAAAEAAAATAw==',
+      mute: 'AAAAAQAAAAEAAAAUAw==',
+      channelUp: 'AAAAAQAAAAEAAAAQAw==',
+      channelDown: 'AAAAAQAAAAEAAAARAw==',
+      input: 'AAAAAQAAAAEAAAAlAw==',
+      replay: 'AAAAAgAAAJcAAAAbAw==',
+      backspace: 'AAAAAgAAAJcAAAAjAw==',
+      '0': 'AAAAAQAAAAEAAAAJAw==',
+      '1': 'AAAAAQAAAAEAAAAAAw==',
+      '2': 'AAAAAQAAAAEAAAABAw==',
+      '3': 'AAAAAQAAAAEAAAACAw==',
+      '4': 'AAAAAQAAAAEAAAADAw==',
+      '5': 'AAAAAQAAAAEAAAAEAw==',
+      '6': 'AAAAAQAAAAEAAAAFAw==',
+      '7': 'AAAAAQAAAAEAAAAGAw==',
+      '8': 'AAAAAQAAAAEAAAAHAw==',
+      '9': 'AAAAAQAAAAEAAAAIAw==',
+    },
+
+    soapBody(code) {
+      return `<?xml version="1.0"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendIRCC xmlns:u="urn:schemas-sony-com:service:IRCC:1"><IRCCCode>${code}</IRCCCode></u:X_SendIRCC></s:Body></s:Envelope>`;
+    },
+
+    async sendIrcc(device, code) {
+      try {
+        await fetch(`http://${device.ip}/sony/IRCC`, {
+          method: 'POST',
+          mode: 'no-cors',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'text/xml; charset=UTF-8',
+            SOAPACTION: '"urn:schemas-sony-com:service:IRCC:1#X_SendIRCC"',
+            'X-Auth-PSK': device.psk || '',
+          },
+          body: sony.soapBody(code),
+        });
+      } catch (err) {
+        throw classifyFetchError(err);
+      }
+    },
+
+    async sendKey(device, key) {
+      if (key === 'digit') throw Object.assign(new Error('use sendDigit'), { code: 'bad-call' });
+      const code = sony.IRCC_CODE[key];
+      if (!code) throw Object.assign(new Error('unsupported-key'), { code: 'unsupported' });
+      await sony.sendIrcc(device, code);
+    },
+
+    async sendDigit(device, digit) {
+      const code = sony.IRCC_CODE[digit];
+      if (!code) throw Object.assign(new Error('unsupported-key'), { code: 'unsupported' });
+      await sony.sendIrcc(device, code);
+    },
+
+    async testConnection(device) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000);
+      try {
+        await fetch(`http://${device.ip}/sony/system`, {
+          method: 'POST',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Auth-PSK': device.psk || '',
+          },
+          body: JSON.stringify({ method: 'getPowerStatus', id: 1, params: [], version: '1.0' }),
+        });
+        return true;
+      } catch (err) {
+        throw classifyFetchError(err);
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+  };
+
+  // ----------------------------------------------------------------------
+  // PANASONIC - Viera "Network Control" SOAP over HTTP (port 55000)
+  // The SOAPACTION header may be stripped by the browser in no-cors mode,
+  // so this is best-effort (see "Paano Gumagana" / Help).
+  // ----------------------------------------------------------------------
+  const panasonic = {
+    KEY_MAP: {
+      power: 'NRC_POWER-ONOFF',
+      home: 'NRC_HOME-ONOFF',
+      back: 'NRC_RETURN-ONOFF',
+      select: 'NRC_ENTER-ONOFF',
+      ok: 'NRC_ENTER-ONOFF',
+      up: 'NRC_UP-ONOFF',
+      down: 'NRC_DOWN-ONOFF',
+      left: 'NRC_LEFT-ONOFF',
+      right: 'NRC_RIGHT-ONOFF',
+      volumeUp: 'NRC_VOLUP-ONOFF',
+      volumeDown: 'NRC_VOLDOWN-ONOFF',
+      mute: 'NRC_MUTE-ONOFF',
+      channelUp: 'NRC_CH_UP-ONOFF',
+      channelDown: 'NRC_CH_DOWN-ONOFF',
+      input: 'NRC_CHG_INPUT-ONOFF',
+      replay: 'NRC_REW-ONOFF',
+      backspace: 'NRC_RETURN-ONOFF',
+    },
+
+    soapBody(key) {
+      return `<?xml version="1.0" encoding="utf-8"?><s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body><u:X_SendKey xmlns:u="urn:panasonic-com:service:p00NetworkControl:1"><X_KeyEvent>${key}</X_KeyEvent></u:X_SendKey></s:Body></s:Envelope>`;
+    },
+
+    async sendCommand(device, key) {
+      try {
+        await fetch(`http://${device.ip}:55000/nrc/control_0`, {
+          method: 'POST',
+          mode: 'no-cors',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'text/xml; charset="utf-8"',
+            SOAPACTION: '"urn:panasonic-com:service:p00NetworkControl:1#X_SendKey"',
+          },
+          body: panasonic.soapBody(key),
+        });
+      } catch (err) {
+        throw classifyFetchError(err);
+      }
+    },
+
+    async sendKey(device, key) {
+      if (key === 'digit') throw Object.assign(new Error('use sendDigit'), { code: 'bad-call' });
+      const nrcKey = panasonic.KEY_MAP[key];
+      if (!nrcKey) throw Object.assign(new Error('unsupported-key'), { code: 'unsupported' });
+      await panasonic.sendCommand(device, nrcKey);
+    },
+
+    async sendDigit(device, digit) {
+      await panasonic.sendCommand(device, 'NRC_D' + digit + '-ONOFF');
+    },
+
+    async testConnection(device) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000);
+      try {
+        await fetch(`http://${device.ip}:55000/nrc/sdd_0.xml`, {
+          method: 'GET',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: controller.signal,
+        });
+        return true;
+      } catch (err) {
+        throw classifyFetchError(err);
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+  };
+
+  // ----------------------------------------------------------------------
   // Unified dispatch
   // ----------------------------------------------------------------------
-  const BRANDS = { roku, samsung, lg };
+  const BRANDS = { roku, samsung, lg, sony, panasonic };
 
   function isDigitKey(key) {
     return /^[0-9]$/.test(key);
@@ -491,5 +665,5 @@ const TVProtocols = (() => {
     return proto.testConnection(device, onTokenUpdate);
   }
 
-  return { roku, samsung, lg, sendKey, testConnection, withTimeout };
+  return { roku, samsung, lg, sony, panasonic, sendKey, testConnection, withTimeout };
 })();

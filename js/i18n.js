@@ -4,7 +4,7 @@
 
 const PindotI18n = (() => {
   const LANG_KEY = 'pindottv.lang';
-  const DEFAULT_LANG = 'fil';
+  const DEFAULT_LANG = 'en';
 
   const STRINGS = {
     fil: {
@@ -53,6 +53,8 @@ const PindotI18n = (() => {
           <li><strong>Roku:</strong> Settings &rarr; Network &rarr; About. Makikita dito ang "IP address".</li>
           <li><strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, o Settings &rarr; Support &rarr; About This TV.</li>
           <li><strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; piliin ang connected network &rarr; makikita ang IP address (minsan tinatawag na "Network Status").</li>
+          <li><strong>Sony (Bravia / Android TV):</strong> Settings &rarr; Network &rarr; Network Status. I-enable din ang "IP Control" (Pre-Shared Key) sa Home Network settings.</li>
+          <li><strong>Panasonic (Viera):</strong> Settings &rarr; Network &rarr; Network Status. I-enable din ang "TV Remote App" / "Network Control" sa Network Link Settings.</li>
         </ul>`,
         card3Title: '3. Alin ang Pinaka-Gumagana (Compatibility)',
         card3Table: `<thead>
@@ -73,6 +75,16 @@ const PindotI18n = (() => {
             <td>LG Smart TV (webOS)</td>
             <td><span class="badge badge-warn">Limitado</span></td>
             <td>Parehong WebSocket pairing tulad ng Samsung. May "Connect?" prompt na lalabas sa TV - tanggapin agad.</td>
+          </tr>
+          <tr>
+            <td>Sony (Bravia / Android TV)</td>
+            <td><span class="badge badge-warn">Limitado</span></td>
+            <td>Gumagamit ng IRCC-IP (HTTP) na may "Pre-Shared Key" (PSK). Kailangang i-enable muna ang "IP Control" sa TV settings at ilagay ang parehong PSK sa app. Posibleng harangin ng browser ang custom headers.</td>
+          </tr>
+          <tr>
+            <td>Panasonic (Viera)</td>
+            <td><span class="badge badge-warn">Limitado</span></td>
+            <td>Gumagamit ng "Network Control" / TV Remote App (HTTP). Kailangang i-enable muna ito sa TV settings. Posibleng harangin din ng browser ang ilang request.</td>
           </tr>
           <tr>
             <td>Non-Smart TV / walang WiFi</td>
@@ -113,6 +125,8 @@ const PindotI18n = (() => {
         brandLabel: 'Brand',
         ipLabel: 'IP Address ng TV',
         ipPlaceholder: 'hal. 192.168.1.50',
+        pskLabel: 'Passcode (PSK) - opsyonal',
+        pskPlaceholder: 'hal. 1234',
         save: 'I-save',
       },
       switchModal: {
@@ -147,6 +161,8 @@ const PindotI18n = (() => {
         roku: '<strong>Roku:</strong> Settings &rarr; Network &rarr; About. Hanapin ang "IP address" (hal. 192.168.1.50). Siguraduhing nakabukas ang "Control by mobile apps / Network access" sa Settings &rarr; System &rarr; Advanced system settings.',
         samsung: '<strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, o Settings &rarr; Support &rarr; About This TV. Sa unang gamit, lalabas ang "Allow connection?" sa TV - tanggapin agad (within ~25 seconds).',
         lg: '<strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; piliin ang konektadong network para makita ang IP. Sa unang gamit, may lalabas na "Connect?" prompt sa TV - tanggapin agad.',
+        sony: '<strong>Sony (Bravia / Android TV):</strong> I-enable ang "IP Control" sa Settings &rarr; Network &rarr; Home Network &rarr; IP Control &rarr; Authentication, itakda sa "Normal and Pre-Shared Key" at lagyan ng passcode (PSK) - ilagay din ang parehong PSK sa ibaba. Makikita ang IP sa Settings &rarr; Network &rarr; Network Status.',
+        panasonic: '<strong>Panasonic (Viera):</strong> I-enable ang "TV Remote App" / "Network Control" sa Settings &rarr; Network &rarr; Network Link Settings (o "TV Remote" sa app settings). Makikita ang IP sa Settings &rarr; Network &rarr; Network Status.',
       },
     },
 
@@ -196,6 +212,8 @@ const PindotI18n = (() => {
           <li><strong>Roku:</strong> Settings &rarr; Network &rarr; About. The "IP address" is shown here.</li>
           <li><strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, or Settings &rarr; Support &rarr; About This TV.</li>
           <li><strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; select the connected network &rarr; the IP address is shown (sometimes called "Network Status").</li>
+          <li><strong>Sony (Bravia / Android TV):</strong> Settings &rarr; Network &rarr; Network Status. Also enable "IP Control" (Pre-Shared Key) in the Home Network settings.</li>
+          <li><strong>Panasonic (Viera):</strong> Settings &rarr; Network &rarr; Network Status. Also enable "TV Remote App" / "Network Control" in Network Link Settings.</li>
         </ul>`,
         card3Title: '3. Which Works Best (Compatibility)',
         card3Table: `<thead>
@@ -216,6 +234,16 @@ const PindotI18n = (() => {
             <td>LG Smart TV (webOS)</td>
             <td><span class="badge badge-warn">Limited</span></td>
             <td>Same WebSocket pairing as Samsung. A "Connect?" prompt will appear on the TV - accept it right away.</td>
+          </tr>
+          <tr>
+            <td>Sony (Bravia / Android TV)</td>
+            <td><span class="badge badge-warn">Limited</span></td>
+            <td>Uses IRCC-IP (HTTP) with a "Pre-Shared Key" (PSK). You must enable "IP Control" in TV settings first and enter the same PSK in the app. The browser may also block custom headers.</td>
+          </tr>
+          <tr>
+            <td>Panasonic (Viera)</td>
+            <td><span class="badge badge-warn">Limited</span></td>
+            <td>Uses "Network Control" / TV Remote App (HTTP). Must be enabled first in TV settings. The browser may also block some requests.</td>
           </tr>
           <tr>
             <td>Non-Smart TV / no WiFi</td>
@@ -256,6 +284,8 @@ const PindotI18n = (() => {
         brandLabel: 'Brand',
         ipLabel: 'TV IP Address',
         ipPlaceholder: 'e.g. 192.168.1.50',
+        pskLabel: 'Passcode (PSK) - optional',
+        pskPlaceholder: 'e.g. 1234',
         save: 'Save',
       },
       switchModal: {
@@ -290,6 +320,8 @@ const PindotI18n = (() => {
         roku: '<strong>Roku:</strong> Settings &rarr; Network &rarr; About. Find the "IP address" (e.g. 192.168.1.50). Make sure "Control by mobile apps / Network access" is enabled in Settings &rarr; System &rarr; Advanced system settings.',
         samsung: '<strong>Samsung (Tizen):</strong> Settings &rarr; General &rarr; Network &rarr; Network Status, or Settings &rarr; Support &rarr; About This TV. On first use, an "Allow connection?" prompt will appear on the TV - accept it right away (within ~25 seconds).',
         lg: '<strong>LG (webOS):</strong> Settings &rarr; All Settings &rarr; Connection &rarr; Wi-Fi &rarr; select the connected network to see the IP. On first use, a "Connect?" prompt will appear on the TV - accept it right away.',
+        sony: '<strong>Sony (Bravia / Android TV):</strong> Enable "IP Control" in Settings &rarr; Network &rarr; Home Network &rarr; IP Control &rarr; Authentication, set it to "Normal and Pre-Shared Key" and set a passcode (PSK) - enter the same PSK below. Find the IP under Settings &rarr; Network &rarr; Network Status.',
+        panasonic: '<strong>Panasonic (Viera):</strong> Enable "TV Remote App" / "Network Control" in Settings &rarr; Network &rarr; Network Link Settings (or "TV Remote" in app settings). Find the IP under Settings &rarr; Network &rarr; Network Status.',
       },
     },
   };

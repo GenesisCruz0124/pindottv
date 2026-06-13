@@ -3,7 +3,8 @@
  */
 
 (() => {
-  const BRAND_LABELS = { roku: 'Roku', samsung: 'Samsung', lg: 'LG' };
+  const BRAND_LABELS = { roku: 'Roku', samsung: 'Samsung', lg: 'LG', sony: 'Sony', panasonic: 'Panasonic' };
+  const BRANDS_WITH_PSK = ['sony'];
 
   const byId = (id) => document.getElementById(id);
 
@@ -36,6 +37,8 @@
     tvName: byId('tvName'),
     tvBrand: byId('tvBrand'),
     tvIp: byId('tvIp'),
+    tvPskField: byId('tvPskField'),
+    tvPsk: byId('tvPsk'),
     brandHint: byId('brandHint'),
     tvCancelBtn: byId('tvCancelBtn'),
 
@@ -285,6 +288,7 @@
   // ---------------- Add / Edit TV modal ----------------
   function updateBrandHint() {
     els.brandHint.innerHTML = PindotI18n.t('brandHints.' + els.tvBrand.value) || '';
+    els.tvPskField.classList.toggle('hidden', !BRANDS_WITH_PSK.includes(els.tvBrand.value));
   }
 
   function openTvModal(deviceId) {
@@ -296,10 +300,12 @@
       els.tvName.value = device.name;
       els.tvBrand.value = device.brand;
       els.tvIp.value = device.ip;
+      els.tvPsk.value = device.psk || '';
     } else {
       els.tvForm.reset();
       els.tvId.value = '';
       els.tvBrand.value = 'roku';
+      els.tvPsk.value = '';
     }
     updateBrandHint();
     els.tvModalOverlay.classList.remove('hidden');
@@ -330,6 +336,7 @@
       const name = els.tvName.value.trim();
       const ip = els.tvIp.value.trim();
       const brand = els.tvBrand.value;
+      const psk = els.tvPsk.value.trim() || null;
 
       if (!name || !ip) return;
       if (!isValidIp(ip)) {
@@ -339,9 +346,9 @@
 
       const id = els.tvId.value;
       if (id) {
-        PindotStorage.updateDevice(id, { name, ip, brand, token: null, lastStatus: 'unknown' });
+        PindotStorage.updateDevice(id, { name, ip, brand, psk, token: null, lastStatus: 'unknown' });
       } else {
-        const device = PindotStorage.addDevice({ name, ip, brand });
+        const device = PindotStorage.addDevice({ name, ip, brand, psk });
         PindotStorage.setActiveDeviceId(device.id);
       }
       refreshState();

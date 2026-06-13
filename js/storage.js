@@ -24,12 +24,13 @@ const PindotStorage = (() => {
     return 'tv_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
 
-  function addDevice({ name, ip, brand }) {
+  function addDevice({ name, ip, brand, psk }) {
     const device = {
       id: generateId(),
       name: name.trim(),
       ip: ip.trim(),
       brand,
+      psk: psk ? psk.trim() : null,
       token: null,
       lastStatus: 'unknown', // 'online' | 'offline' | 'unknown'
       lastCheckedAt: null,

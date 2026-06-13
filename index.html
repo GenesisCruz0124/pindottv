@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fil">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#3b82f6" />
-  <meta name="description" content="PindotTV - Gawing remote control ang phone mo para sa Smart TV gamit ang WiFi. Walang kailangang i-install sa TV, browser lang!" />
+  <meta name="description" content="PindotTV - Turn your phone into a remote control for your Smart TV using WiFi. No install needed on the TV, just your browser!" />
   <title>PindotTV - WiFi Smart TV Remote</title>
 
   <link rel="manifest" href="manifest.json" />
@@ -50,13 +50,13 @@
         <span class="brand-name">Pindot<strong>TV</strong></span>
       </div>
       <div class="header-actions">
-        <button class="lang-btn" id="langToggleBtn" type="button" data-i18n-aria-label="header.langToggle" aria-label="Palitan ang wika">
+        <button class="lang-btn" id="langToggleBtn" type="button" data-i18n-aria-label="header.langToggle" aria-label="Change language">
           <svg class="icon icon-sm"><use href="#icon-globe"></use></svg>
-          <span id="langToggleLabel">EN</span>
+          <span id="langToggleLabel">TL</span>
         </button>
-        <button class="switch-btn" id="switchBtn" type="button" data-i18n-aria-label="header.chooseTv" aria-label="Pumili ng TV">
+        <button class="switch-btn" id="switchBtn" type="button" data-i18n-aria-label="header.chooseTv" aria-label="Choose TV">
           <span class="status-dot" id="headerStatusDot" data-status="unknown"></span>
-          <span id="headerDeviceName" data-i18n="header.noTv">Walang TV</span>
+          <span id="headerDeviceName" data-i18n="header.noTv">No TV</span>
           <svg class="icon icon-sm"><use href="#icon-chevron-down"></use></svg>
         </button>
       </div>
@@ -199,6 +199,8 @@
                 <li><strong>Roku:</strong> Settings → Network → About. Makikita dito ang "IP address".</li>
                 <li><strong>Samsung (Tizen):</strong> Settings → General → Network → Network Status, o Settings → Support → About This TV.</li>
                 <li><strong>LG (webOS):</strong> Settings → All Settings → Connection → Wi-Fi → piliin ang connected network → makikita ang IP address (minsan tinatawag na "Network Status").</li>
+                <li><strong>Sony (Bravia / Android TV):</strong> Settings → Network → Network Status. I-enable din ang "IP Control" (Pre-Shared Key) sa Home Network settings.</li>
+                <li><strong>Panasonic (Viera):</strong> Settings → Network → Network Status. I-enable din ang "TV Remote App" / "Network Control" sa Network Link Settings.</li>
               </ul>
             </div>
           </article>
@@ -224,6 +226,16 @@
                   <td>LG Smart TV (webOS)</td>
                   <td><span class="badge badge-warn">Limitado</span></td>
                   <td>Parehong WebSocket pairing tulad ng Samsung. May "Connect?" prompt na lalabas sa TV - tanggapin agad.</td>
+                </tr>
+                <tr>
+                  <td>Sony (Bravia / Android TV)</td>
+                  <td><span class="badge badge-warn">Limitado</span></td>
+                  <td>Gumagamit ng IRCC-IP (HTTP) na may "Pre-Shared Key" (PSK). Kailangang i-enable muna ang "IP Control" sa TV settings at ilagay ang parehong PSK sa app. Posibleng harangin ng browser ang custom headers.</td>
+                </tr>
+                <tr>
+                  <td>Panasonic (Viera)</td>
+                  <td><span class="badge badge-warn">Limitado</span></td>
+                  <td>Gumagamit ng "Network Control" / TV Remote App (HTTP). Kailangang i-enable muna ito sa TV settings. Posibleng harangin din ng browser ang ilang request.</td>
                 </tr>
                 <tr>
                   <td>Non-Smart TV / walang WiFi</td>
@@ -318,6 +330,8 @@
             <option value="roku">Roku (TV / Streaming Stick)</option>
             <option value="samsung">Samsung (Tizen Smart TV)</option>
             <option value="lg">LG (webOS Smart TV)</option>
+            <option value="sony">Sony (Bravia / Android TV)</option>
+            <option value="panasonic">Panasonic (Viera)</option>
           </select>
         </label>
 
@@ -326,6 +340,11 @@
           <input type="text" id="tvIp" data-i18n-placeholder="modal.ipPlaceholder" placeholder="hal. 192.168.1.50" required
                  pattern="^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$"
                  inputmode="decimal" autocomplete="off" />
+        </label>
+
+        <label class="field hidden" id="tvPskField">
+          <span data-i18n="modal.pskLabel">Passcode (PSK) - optional</span>
+          <input type="text" id="tvPsk" data-i18n-placeholder="modal.pskPlaceholder" placeholder="e.g. 1234" autocomplete="off" />
         </label>
 
         <div class="field-hint" id="brandHint"></div>
