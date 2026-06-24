@@ -31,14 +31,15 @@ jobs:
         run: chmod +x gradlew
 
       - name: Restore stable debug keystore
-        if: ${{ secrets.ANDROID_DEBUG_KEYSTORE_BASE64 != '' }}
         env:
           ANDROID_DEBUG_KEYSTORE_BASE64: ${{ secrets.ANDROID_DEBUG_KEYSTORE_BASE64 }}
-        run: echo "$ANDROID_DEBUG_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/debug.keystore"
+        run: |
+          if [ -n "$ANDROID_DEBUG_KEYSTORE_BASE64" ]; then
+            echo "$ANDROID_DEBUG_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/debug.keystore"
+            echo "ANDROID_DEBUG_KEYSTORE_PATH=$RUNNER_TEMP/debug.keystore" >> "$GITHUB_ENV"
+          fi
 
       - name: Build debug APK
-        env:
-          ANDROID_DEBUG_KEYSTORE_PATH: ${{ secrets.ANDROID_DEBUG_KEYSTORE_BASE64 != '' && format('{0}/debug.keystore', runner.temp) || '' }}
         run: ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK artifact
